@@ -65,6 +65,15 @@
             android:clickable="true"
             android:background="?attr/selectableItemBackgroundBorderless"/>
 
+        <ImageView
+            android:id="@+id/gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_gallery"
+            android:padding="15dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+
     </LinearLayout>
 
 

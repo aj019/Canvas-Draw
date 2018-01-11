@@ -48,6 +48,9 @@ public class MainActivity extends AppCompatActivity
     private int mCurrentColor;
     private int mCurrentStroke;
     private static final int MAX_STROKE_WIDTH = 50;
+    private static final int REQUEST_WRITE_STORAGE_SHARE = 100;
+    private static final int REQUEST_WRITE_STORAGE_SAVE = 200;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -72,10 +75,13 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId())
         {
             case R.id.action_share:
-                requestPermissionsAndSaveBitmap();
+                requestPermissionsAndShareBitmap();
                 break;
             case R.id.action_clear:
                 mDrawingView.clearCanvas();
+                break;
+            case R.id.action_save:
+                requestPermissionsAndSaveBitmap();
                 break;
         }
 
@@ -172,12 +178,25 @@ public class MainActivity extends AppCompatActivity
         startActivity(Intent.createChooser(intent, "Share Image"));
     }
 
-    private void requestPermissionsAndSaveBitmap()
+    private void requestPermissionsAndShareBitmap()
     {
-        if (PermissionManager.checkWriteStoragePermissions(this))
+        if (PermissionManager.checkWriteStoragePermissions(this,REQUEST_WRITE_STORAGE_SHARE))
         {
             Uri uri = FileManager.shareBitmap(mDrawingView.getBitmap());
             startShareDialog(uri);
+        }
+    }
+
+    private void requestPermissionsAndSaveBitmap()
+    {
+        if (PermissionManager.checkWriteStoragePermissions(this,REQUEST_WRITE_STORAGE_SAVE))
+        {
+            boolean saved = FileManager.saveBitmap(mDrawingView.getBitmap());
+            if(saved){
+                Toast.makeText(this,"Saved Successfully",Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this,"Problem Saving File",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -187,17 +206,25 @@ public class MainActivity extends AppCompatActivity
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode)
         {
-            case PermissionManager.REQUEST_WRITE_STORAGE:
-            {
+            case REQUEST_WRITE_STORAGE_SHARE:
+
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    Uri uri = FileManager.saveBitmap(mDrawingView.getBitmap());
-                    startShareDialog(uri);
+                    requestPermissionsAndShareBitmap();
                 } else
                 {
                     Toast.makeText(this, "The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
                 }
-            }
+            break;
+            case REQUEST_WRITE_STORAGE_SAVE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    requestPermissionsAndSaveBitmap();
+                } else
+                {
+                    Toast.makeText(this, "The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
+                }
+             break;
         }
     }
 

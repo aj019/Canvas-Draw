@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class FileManager
 {
-    public static Uri saveBitmap(Bitmap bitmap)
+    public static boolean saveBitmap(Bitmap bitmap)
     {
         String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DrawingCanvas/saved";
         File dir = new File(file_path);
@@ -31,15 +31,15 @@ public class FileManager
         FileOutputStream fOut;
         try {
             fOut = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+             boolean saved = bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
             fOut.flush();
             fOut.close();
-            return Uri.fromFile(file);
+            return saved;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
+        return false;
     }
 
     public static Uri shareBitmap(Bitmap bitmap)
