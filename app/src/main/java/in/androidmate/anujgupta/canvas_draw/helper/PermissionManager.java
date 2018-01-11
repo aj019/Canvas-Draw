@@ -23,4 +23,15 @@ public class PermissionManager
         }
         return hasPermission;
     }
+
+    public static boolean checkReadStoragePermissions(Activity activity,int REQUEST_WRITE_STORAGE)
+    {
+        boolean hasPermission = (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
+        }
+        return hasPermission;
+    }
 }

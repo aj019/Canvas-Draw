@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.main_stroke_iv) ImageView mStrokeImageView;
     @BindView(R.id.main_undo_iv) ImageView mUndoImageView;
     @BindView(R.id.main_redo_iv) ImageView mRedoImageView;
+    @BindView(R.id.gallery) ImageView mGalleryImageView;
 
     private int mCurrentBackgroundColor;
     private int mCurrentColor;
@@ -256,5 +257,12 @@ public class MainActivity extends AppCompatActivity
     public void onRedoOptionClick()
     {
         mDrawingView.redo();
+    }
+
+    @OnClick(R.id.gallery)
+    public void onGalleryClick(){
+        Intent i = new Intent(MainActivity.this,GalleryActivity.class);
+        startActivity(i);
+
     }
 }
